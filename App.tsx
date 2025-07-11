@@ -7,6 +7,8 @@ import { Auth } from './components/Auth';
 import { Counter } from './components/Counter';
 import { CheckedDates } from './types';
 import { supabase } from './supabase/client';
+import { ClipboardDocumentListIcon } from './components/icons';
+import AirdropAdvisor from './components/AirdropAdvisor';
 
 const formatDateToKey = (date: Date): string => {
     return date.toISOString().split('T')[0]; // YYYY-MM-DD
@@ -18,6 +20,7 @@ const App: React.FC = () => {
     const [checkedDates, setCheckedDates] = useState<CheckedDates>({});
     const [confirmingDate, setConfirmingDate] = useState<Date | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isChecklistOpen, setIsChecklistOpen] = useState(false);
 
     useEffect(() => {
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -43,7 +46,7 @@ const App: React.FC = () => {
         setIsLoading(true);
         const { data, error } = await supabase
             .from('checked_dates')
-            .select('date')
+            .select('*')
             .eq('user_id', userId);
 
         if (error) {
@@ -83,7 +86,7 @@ const App: React.FC = () => {
         } else {
             setCheckedDates(prev => ({ ...prev, [dateKey]: true }));
 
-            const { error } = await supabase.from('checked_dates').insert({ date: dateKey, user_id: session.user.id });
+            const { error } = await supabase.from('checked_dates').insert({ date: dateKey, user_id: session.user.id } as any);
 
             if (error) {
                 console.error("Error checking date:", error);
@@ -165,6 +168,13 @@ const App: React.FC = () => {
                         <p className="text-slate-400 mt-2 max-w-md mx-auto">
                             Tandai setiap tanggal untuk memastikan semua tugas postingan telah selesai.
                         </p>
+                        <button
+                            onClick={() => setIsChecklistOpen(true)}
+                            className="inline-flex items-center justify-center gap-2 px-4 py-2 mt-4 text-sm font-semibold text-white bg-slate-700 rounded-lg shadow-lg hover:bg-slate-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-sky-500 animate-fade-in"
+                        >
+                            <ClipboardDocumentListIcon className="w-5 h-5" />
+                            Checklist Strategi
+                        </button>
                     </div>
                     <div className="bg-slate-800 rounded-xl shadow-2xl shadow-slate-950/50 p-1 md:p-2">
                          <Header 
@@ -186,6 +196,10 @@ const App: React.FC = () => {
                     </footer>
                 </div>
             </div>
+            <AirdropAdvisor 
+                isOpen={isChecklistOpen}
+                onClose={() => setIsChecklistOpen(false)}
+            />
             <ConfirmDialog
                 isOpen={!!confirmingDate}
                 onClose={handleCloseDialog}
