@@ -24,6 +24,7 @@ export interface Database {
           date?: string;
           user_id?: string;
         };
+        Relationships: [];
       };
     };
     Views: {

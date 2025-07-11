@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Calendar from './components/Calendar';
 import { ConfirmDialog } from './components/ConfirmDialog';
 import { Auth } from './components/Auth';
+import { Counter } from './components/Counter';
 import { CheckedDates } from './types';
 import { supabase } from './supabase/client';
 
@@ -179,6 +180,7 @@ const App: React.FC = () => {
                             onDateClick={handleDateClick}
                         />
                     </div>
+                    <Counter />
                      <footer className="text-center mt-8 text-slate-500 text-sm">
                         <p>Progres Anda disinkronkan dengan akun Anda.</p>
                     </footer>
