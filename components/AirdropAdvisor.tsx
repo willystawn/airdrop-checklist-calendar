@@ -6,14 +6,28 @@ interface AirdropAdvisorProps {
     onClose: () => void;
 }
 
-// Helper component for styled toggle switches, now with internal state
-const ToggleSwitch = ({ id, label }: { id: string, label:string }) => {
+// Updated ToggleSwitch to notify parent of changes via onToggle callback
+const ToggleSwitch = ({ id, label, tag, onToggle }: { id: string, label: string, tag?: string, onToggle?: (isChecked: boolean) => void }) => {
     const [checked, setChecked] = useState(false);
+
+    const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newCheckedState = e.target.checked;
+        setChecked(newCheckedState);
+        onToggle?.(newCheckedState);
+    };
+
     return (
         <label htmlFor={id} className="flex items-center justify-between cursor-pointer p-3 bg-slate-900 rounded-lg hover:bg-slate-700/80 transition-colors">
-            <span className="text-slate-300">{label}</span>
-            <div className="relative">
-                <input id={id} type="checkbox" className="sr-only" checked={checked} onChange={e => setChecked(e.target.checked)} />
+            <div className="flex flex-col items-start sm:flex-row sm:items-center sm:gap-2">
+                <span className="text-slate-300">{label}</span>
+                {tag && (
+                    <span className="mt-1 sm:mt-0 text-xs font-semibold bg-sky-500/20 text-sky-400 px-2 py-0.5 rounded-full">
+                        {tag}
+                    </span>
+                )}
+            </div>
+            <div className="relative flex-shrink-0">
+                <input id={id} type="checkbox" className="sr-only" checked={checked} onChange={handleToggle} />
                 <div className={`block w-14 h-8 rounded-full transition-colors ${checked ? 'bg-emerald-500' : 'bg-slate-600'}`}></div>
                 <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform ${checked ? 'transform translate-x-6' : ''}`}></div>
             </div>
@@ -22,6 +36,9 @@ const ToggleSwitch = ({ id, label }: { id: string, label:string }) => {
 };
 
 const AirdropAdvisor: React.FC<AirdropAdvisorProps> = ({ isOpen, onClose }) => {
+    const [isPointsSystem, setIsPointsSystem] = useState(false);
+    const [isOgRole, setIsOgRole] = useState(false);
+
     if (!isOpen) return null;
 
     return (
@@ -49,13 +66,29 @@ const AirdropAdvisor: React.FC<AirdropAdvisorProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className="space-y-3">
-                    <ToggleSwitch id="bot-allowed" label="Bisa pakai bot auto tx? @NeedBot / @BotDone" />
-                    <ToggleSwitch id="points-system" label="Sistem poin? @Points" />
-                    <ToggleSwitch id="points-system" label="Poin no limit? @Maksimalkan" />
-                    <ToggleSwitch id="og-role" label="Role OG?" />
-                    <ToggleSwitch id="discord-push" label="Perlu push DC? @OGPushDC" />
-                    <ToggleSwitch id="multi-account" label="Multi akun? @Tuyul" />
+                    <ToggleSwitch id="bot-allowed" label="Bisa pakai bot auto tx?" tag="@NeedBot / @BotDone" />
+                    <ToggleSwitch id="multi-account" label="Multi akun?" tag="@Tuyul" />
                     
+                    {/* Points System with conditional child */}
+                    <div>
+                        <ToggleSwitch id="points-system" label="Sistem poin?" tag="@Points" onToggle={setIsPointsSystem} />
+                        {isPointsSystem && (
+                            <div className="mt-3 pl-6 ml-4 border-l-2 border-slate-700 animate-scale-in">
+                                <ToggleSwitch id="points-no-limit" label="Poin no limit?" tag="@Maksimalkan" />
+                            </div>
+                        )}
+                    </div>
+                    
+                    {/* OG Role with conditional child */}
+                    <div>
+                         <ToggleSwitch id="og-role" label="Role OG?" onToggle={setIsOgRole} />
+                         {isOgRole && (
+                             <div className="mt-3 pl-6 ml-4 border-l-2 border-slate-700 animate-scale-in">
+                                <ToggleSwitch id="discord-push" label="Perlu push DC?" tag="@OGPushDC" />
+                             </div>
+                         )}
+                    </div>
+                                     
                     <div className="pt-2">
                         <label htmlFor="strategy-notes" className="block text-sm font-medium text-slate-300 mb-2">
                             Bagaimana cara biar dapat banyak? (Catatan Strategi)
