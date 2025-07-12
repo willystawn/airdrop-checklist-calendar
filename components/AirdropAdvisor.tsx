@@ -74,7 +74,7 @@ const AirdropAdvisor: React.FC<AirdropAdvisorProps> = ({ isOpen, onClose }) => {
                         <ToggleSwitch id="points-system" label="Sistem poin?" tag="@Points" onToggle={setIsPointsSystem} />
                         {isPointsSystem && (
                             <div className="mt-3 pl-6 ml-4 border-l-2 border-slate-700 animate-scale-in">
-                                <ToggleSwitch id="points-no-limit" label="Poin no limit?" tag="@Maksimalkan" />
+                                <ToggleSwitch id="points-no-limit" label="Poin no limit?" tag="@NoLimits" />
                             </div>
                         )}
                     </div>
