@@ -49,11 +49,12 @@ const AirdropAdvisor: React.FC<AirdropAdvisorProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className="space-y-3">
-                    <ToggleSwitch id="bot-allowed" label="Bisa pakai bot auto tx?" />
-                    <ToggleSwitch id="points-system" label="Sistem poin?" />
+                    <ToggleSwitch id="bot-allowed" label="Bisa pakai bot auto tx? @NeedBot / @BotDone" />
+                    <ToggleSwitch id="points-system" label="Sistem poin? @Points" />
+                    <ToggleSwitch id="points-system" label="Poin no limit? @Maksimalkan" />
                     <ToggleSwitch id="og-role" label="Role OG?" />
-                    <ToggleSwitch id="discord-push" label="Perlu push DC?" />
-                    <ToggleSwitch id="multi-account" label="Multi akun?" />
+                    <ToggleSwitch id="discord-push" label="Perlu push DC? @OGPushDC" />
+                    <ToggleSwitch id="multi-account" label="Multi akun? @Tuyul" />
                     
                     <div className="pt-2">
                         <label htmlFor="strategy-notes" className="block text-sm font-medium text-slate-300 mb-2">
