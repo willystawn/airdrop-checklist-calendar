@@ -84,7 +84,7 @@ const AirdropAdvisor: React.FC<AirdropAdvisorProps> = ({ isOpen, onClose }) => {
                          <ToggleSwitch id="og-role" label="Role OG?" onToggle={setIsOgRole} />
                          {isOgRole && (
                              <div className="mt-3 pl-6 ml-4 border-l-2 border-slate-700 animate-scale-in">
-                                <ToggleSwitch id="discord-push" label="Perlu push DC?" tag="@OGPushDC" />
+                                <ToggleSwitch id="discord-push" label="Perlu push DC?" tag="@OG" />
                              </div>
                          )}
                     </div>
